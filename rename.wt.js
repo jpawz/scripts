@@ -3,8 +3,9 @@ const oldNameClassName = "x-grid3-col x-grid3-cell x-grid3-td-objName ";
 const newNameClassName = "x-grid3-col x-grid3-cell x-grid3-td-NEWNAME_JSID ";
 
 function getOldNames() {
-  var oldNamesList =
-    document.getElementById(tableId).getElementsByClassName(oldNameClassName);
+  var oldNamesList = window.frames[4].document
+                    .getElementById(tableId)
+                    .getElementsByClassName(oldNameClassName);
 
   var oldNames = [];
   let i = 0;
@@ -39,8 +40,9 @@ function changeLetters(oldName) {
 }
 
 function setNewNames() {
-  var newNamesFields =
-    document.getElementById(tableId).getElementsByClassName(newNameClassName);
+  var newNamesFields = window.frames[4].document
+                      .getElementById(tableId)
+                      .getElementsByClassName(newNameClassName);
 
   var newNames = getNewNames();
 
