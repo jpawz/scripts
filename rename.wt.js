@@ -1,9 +1,10 @@
 const tableId = "MultiRenameTable";
 const oldNameClassName = "x-grid3-col x-grid3-cell x-grid3-td-objName ";
 const newNameClassName = "x-grid3-col x-grid3-cell x-grid3-td-NEWNAME_JSID ";
+const iframeName = "lbContentIframe";
 
 function getOldNames() {
-  var oldNamesList = window.frames[4].document
+  var oldNamesList = window.frames[iframeName].document
                     .getElementById(tableId)
                     .getElementsByClassName(oldNameClassName);
 
@@ -40,7 +41,7 @@ function changeLetters(oldName) {
 }
 
 function setNewNames() {
-  var newNamesFields = window.frames[4].document
+  var newNamesFields = window.frames[iframeName].document
                       .getElementById(tableId)
                       .getElementsByClassName(newNameClassName);
 
@@ -50,7 +51,7 @@ function setNewNames() {
   [].forEach.call(newNamesFields, function(v, i) {
     if (typeof v.children[0].children[0] != "undefined") {
       v.children[0].children[0].value = newNames[i];
-      v.children[0].children[0].onblur;
+      v.children[0].children[0].onblur();
     }
   });
 }
