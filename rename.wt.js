@@ -2,6 +2,7 @@ const tableId = "MultiRenameTable";
 const oldNameClassName = "x-grid3-col x-grid3-cell x-grid3-td-objName ";
 const newNameClassName = "x-grid3-col x-grid3-cell x-grid3-td-NEWNAME_JSID ";
 const iframeName = "lbContentIframe";
+const rowSize = 23; // px
 
 function getOldNames() {
   var oldNamesList = window.frames[iframeName].document
@@ -52,6 +53,9 @@ function setNewNames() {
     if (typeof v.children[0].children[0] != "undefined") {
       v.children[0].children[0].value = newNames[i];
       v.children[0].children[0].onblur();
+      window.frames[iframeName].document
+        .getElementsByClassName("x-grid3-scroller")[0]
+        .scrollTop += rowSize;
     }
   });
 }
