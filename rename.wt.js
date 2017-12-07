@@ -1,32 +1,7 @@
-const tableId = "MultiRenameTable";
 const oldNameClassName = "x-grid3-col x-grid3-cell x-grid3-td-objName ";
 const newNameClassName = "x-grid3-col x-grid3-cell x-grid3-td-NEWNAME_JSID ";
 const iframeName = "lbContentIframe";
-const rowSize = 23; // px
-
-function getOldNames() {
-  var oldNamesList = window.frames[iframeName].document
-                    .getElementById(tableId)
-                    .getElementsByClassName(oldNameClassName);
-
-  var oldNames = [];
-  let i = 0;
-  [].forEach.call(oldNamesList, function(v, i) {
-    oldNames[i] = v.children[0].innerText;
-  });
-
-  return oldNames;
-}
-
-function getNewNames() {
-  var oldNames = getOldNames();
-  var newNames = [];
-  for (var i = 0; i < oldNames.length; i++) {
-    newNames[i] = changeLetters(oldNames[i]);
-  }
-
-  return newNames;
-}
+const gridClass = "x-grid3-body";
 
 function changeLetters(oldName) {
   var polishLetters = ["Ą", "Ć", "Ę", "Ł", "Ń", "Ó", "Ś", "Ź", "Ż", "ą", "ć", "ę", "ł", "ń", "ó", "ś", "ź", "ż"];
@@ -42,22 +17,20 @@ function changeLetters(oldName) {
 }
 
 function setNewNames() {
-  var newNamesFields = window.frames[iframeName].document
-                      .getElementById(tableId)
-                      .getElementsByClassName(newNameClassName);
+  var rows = window.frames[iframeName].document
+    .getElementsByClassName(gridClass)[0].childNodes;
 
-  var newNames = getNewNames();
+  for (var i = 0; i < rows.length; i++) {
+    var oldName = rows[i].getElementsByClassName(oldNameClassName)[0].innerText;
+    var newName = changeLetters(oldName);
+    var newNameField = rows[i].getElementsByClassName(newNameClassName)[0]
+      .children[0].children[0];
 
-  let i = 0;
-  [].forEach.call(newNamesFields, function(v, i) {
-    if (typeof v.children[0].children[0] != "undefined") {
-      v.children[0].children[0].value = newNames[i];
-      v.children[0].children[0].onblur();
-      window.frames[iframeName].document
-        .getElementsByClassName("x-grid3-scroller")[0]
-        .scrollTop += rowSize;
+    if ((typeof newNameField != "undefined") && oldName != newName) {
+      newNameField.value = newName;
+      newNameField.onblur();
     }
-  });
+  }
 }
 
 setNewNames();
