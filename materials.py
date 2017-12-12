@@ -40,10 +40,11 @@ def exportToExcell():
     ws = wb.active # worksheet
 
     for mFileName in materialFiles:
-        mFile = open(mFileName)
+        mFile = open(mFileName, encoding='utf8')
         materialData = extractData(mFile)
         print(list(materialData.values()))
         ws.append(list(materialData.values()))
+        mFile.close()
 
     wb.save('materials.xlsx')
 
