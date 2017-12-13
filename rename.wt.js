@@ -26,6 +26,9 @@ function changeLetters(oldName) {
 
 function setNewNames() {
     for (var i = lastRow; i < allRows; i++) {
+        lastRow = i;
+        scroller.scrollTop += rowSize;
+        console.log(Math.floor(i / allRows * 100) + '%');
         if (rows[i].getElementsByClassName(oldNameClassName)[0] == null) {
             return;
         }
@@ -42,16 +45,12 @@ function setNewNames() {
             newNameField.value = newName;
             newNameField.onblur();
         }
-
-        lastRow = i;
-        scroller.scrollTop += rowSize;
-        console.log(Math.floor(i / allRows * 100) + '%');
     }
 }
 
 function rename() {
     setNewNames();
-    if (lastRow < allRows) {
+    if (lastRow < allRows - 1) {
         setTimeout(rename, 1000);
     }
 }
