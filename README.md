@@ -5,7 +5,7 @@ It simple script replaces Polish characters to Latin equivalents (like Ł -> L e
 Paste content of the script in developer tools -> console in browser (tested on firefox).
 
 # materials.py
-Exports ProEngineer/Creo material files (.mtl) to Excell spreadsheet.
+Exports ProEngineer/Creo material files (.mtl) to Excel spreadsheet.
 Find all materials in script directory and subdirectories.
 
 # catalog_names.py
@@ -19,4 +19,7 @@ third column: new name
 fourth column: status (empty when part wasn't renamed, "OK" if part was renamed)
 
 # split-speech.py
-Looks for pauses in sound file and streches the pauses to give time for repeating previous pice of speech. The purpose of this script was to prepare sound file for pronunciation exercises (repeting speech) for foreign language practice. The pause duration is equal to previous piece of sound duration.
+Looks for pauses in sound file and stretches the pauses to give time for repeating previous piece of speech. The purpose of this script was to prepare sound file for pronunciation exercises (repeating speech) for foreign language practice. The pause duration is equal to previous piece of sound duration.
+
+# windchill_add_alternative.py
+Adds alternative parts to WTParts in windchill PDM system. Gets data from Excel *.xlsx sheet, where first column contains part number and second column - alternative part number.
