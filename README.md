@@ -18,8 +18,5 @@ second column: old name
 third column: new name
 fourth column: status (empty when part wasn't renamed, "OK" if part was renamed)
 
-# split-speech.py
-Looks for pauses in sound file and stretches the pauses to give time for repeating previous piece of speech. The purpose of this script was to prepare sound file for pronunciation exercises (repeating speech) for foreign language practice. The pause duration is equal to previous piece of sound duration.
-
 # windchill_add_alternative.py
 Adds alternative parts to WTParts in windchill PDM system. Gets data from Excel *.xlsx sheet, where first column contains part number and second column - alternative part number.
