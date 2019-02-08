@@ -20,3 +20,6 @@ fourth column: status (empty when part wasn't renamed, "OK" if part was renamed)
 
 # windchill_add_alternative.py
 Adds alternative parts to WTParts in windchill PDM system. Gets data from Excel *.xlsx sheet, where first column contains part number and second column - alternative part number.
+
+# search-windchill-bookmarklet.js
+[Bookmarklet](https://en.wikipedia.org/wiki/Bookmarklet): removes dashes, whitespaces, appends "*" to number copied to clipboard and searches for the resulting number in the windchill system.
