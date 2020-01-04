@@ -23,26 +23,72 @@ Func Prepare()
 EndFunc
 
 Func DecodeFiles()
-	Local $aFileList = _FileListToArray(".", "*", $FLTA_FILES)
+	Local $aFileList = _FileListToArrayRec(".", "*", $FLTAR_FILES, $FLTAR_NORECUR, $FLTAR_NOSORT, $FLTAR_NOPATH)
+	ProgressOn("Postęp", "", "", -1, 0, $DLG_NOTONTOP)
+	Local $bEncodedSucessfully = True
+	Local $retries = 0
+	Local $status = 0
+	Local $sleepTime = 50
+	Local $GUI = GUICreate("Informacja", 300, 300)
+	Local $edit = GUICtrlCreateEdit("", 8, 5, 290, 290, BitOR($ES_AUTOVSCROLL, $ES_READONLY, $WS_VSCROLL))
+	ConsoleWriteGUI($edit, "Tych plików nie udało się odkodować - odkoduj ręcznie:" & @CRLF)
 	For $i = 1 to UBound($aFileList) - 1
 		If StringCompare($aFileList[$i], $decoderName) <> 0 Then
-			LaunchN($aFileList[$i])
+			Do
+				$status = LaunchN($aFileList[$i], $sleepTime)
+				If $retries = 3 Then
+					ConsoleWriteGUI($edit, $aFileList[$i] & @CRLF)
+					GUISetState(@SW_SHOW, $GUI)
+					$bEncodedSucessfully = False
+					ExitLoop
+				Endif
+				$retries += 1
+				$sleepTime += 1000
+			Until $status = 1
 		Endif
+		$retries = 0
+		$sleepTime = 50
+		ProgressSet(100 * $i / $aFileList[0], "plik " & $i & " / " & ($aFileList[0] - 1))
 	Next
-	MsgBox($MB_OK, "Dekoder", "Zrobione!")
+	ProgressOff()
+
+	If $bEncodedSucessfully = True Then
+		MsgBox($MB_OK, "Dekoder", "Zrobione!")
+	Else
+		While 1
+			Switch GUIGetMsg()
+				Case $GUI_EVENT_CLOSE
+					ExitLoop
+			EndSwitch
+		WEnd
+	EndIf
 EndFunc
 
 
-Func LaunchN($aFile)
-	Run($notepadPath & " -nosession " & $aFile)
-	Local $hWnd = WinWaitActive("[CLASS:Notepad++]")
-	ControlSend($hWnd, "Notepad++", "", "!^s")
-	Local $sW = WinWaitActive("Zapisywanie jako")
-	ControlSend($sW, "[CLASS:#32770]", "[CLASS:Edit; INSTANCE:1]", $outputDir & "\" & $aFile)
-	ControlSend($sW, "[CLASS:#32770]", "[CLASS:Edit; INSTANCE:1]", "{ENTER}")
+Func LaunchN($aFile, $sleepTime)
+	Run($notepadPath & " -nosession -alwaysOnTop " & $aFile)
+	Local $hWnd = WinWaitActive("[CLASS:Notepad++]", "", 3)
+	If $hWnd = 0 Then
+		WinKill($hWnd, "")
+		Return 0
+	Endif
+	Sleep($sleepTime)
+	Send("!^s")
+	Local $sW = WinWaitActive("Zapisywanie jako", "", 3)
+	If $sW = 0 Then
+		WinKill($hWnd, "")
+		Return 0
+	Endif
+	$status = ControlSetText($sW, "[CLASS:#32770]", "[CLASS:Edit; INSTANCE:1]", $outputDir & "\" & $aFile)
+	If $status = 0 Then
+		WinKill($hWnd, "")
+		Return 0
+	Endif
+	Send("{ENTER}")
 	WinWait($hWnd)
 	ControlFocus($hWnd, "Notepad++", "")
 	WinClose($hWnd)
+	Return 1
 EndFunc
 
 Func Help()
