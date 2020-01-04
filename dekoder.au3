@@ -1,3 +1,7 @@
+; TODO: 
+; * progress bar https://www.autoitscript.com/wiki/Progress_Bar_Sample
+; * save instead of save as (faster) - overwrite existing files
+
 #include <File.au3>
 #include <Array.au3>
 #include <AutoItConstants.au3>
