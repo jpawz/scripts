@@ -1,5 +1,9 @@
 #include <File.au3>
 #include <Array.au3>
+#include <AutoItConstants.au3>
+#include <EditConstants.au3>
+#include <GUIConstantsEx.au3>
+#include <WindowsConstants.au3>
 
 Opt("WinTitleMatchMode", -2)
 
@@ -12,7 +16,7 @@ DecodeFiles()
 
 Func Prepare()
 	If not FileExists($notepadPath) Then
-		MsgBox($MB_OK, "Notepad++", "Nie znaleziono " & $notepadPath)
+		Help()
 		Exit
 	Endif
 	DirCreate($outputDir)
@@ -39,4 +43,29 @@ Func LaunchN($aFile)
 	WinWait($hWnd)
 	ControlFocus($hWnd, "Notepad++", "")
 	WinClose($hWnd)
+EndFunc
+
+Func Help()
+	Local $helpGui = GUICreate("Instrukcja", 300, 300)
+	Local $helpEdit = GUICtrlCreateEdit("", 8, 5, 290, 290, BitOR($ES_AUTOVSCROLL, $ES_READONLY, $WS_VSCROLL))
+	ConsoleWriteGUI($helpEdit, "Instrukcja:" & @CRLF)
+	ConsoleWriteGUI($helpEdit, "1. Notepad++ musi być w katalogu D:\notepad++\" & @CRLF)
+	ConsoleWriteGUI($helpEdit, "2. notepad++: Ustawienia -> Ustawienia -> Domyślna ścieżka, zaznaczyć ""Używaj nowego okna..."" "& @CRLF)
+	ConsoleWriteGUI($helpEdit, "3. Zaktualizować notepad++ (menu ""?"" -> ""Uaktualij Notepad++"""& @CRLF)
+	ConsoleWriteGUI($helpEdit, "4. Zmniejszyć okno Notepad++ (nie powinno być zmaksymalizowane)" & @CRLF)
+	ConsoleWriteGUI($helpEdit, "5. Zamknąć Notepad++ i uruchomić odkodowanie jeszcze raz" & @CRLF)
+	GUISetState(@SW_SHOW, $helpGui)
+	While 1
+		Switch GUIGetMsg()
+			Case $GUI_EVENT_CLOSE
+				ExitLoop
+		EndSwitch
+	Wend
+	GUIDelete()
+EndFunc
+
+Func ConsoleWriteGUI(Const ByRef $hConsole, Const $sTxt)
+    Local Static $sContent = ""
+    $sContent &= $sTxt
+    GUICtrlSetData($hConsole, $sContent)
 EndFunc
