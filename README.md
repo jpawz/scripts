@@ -23,3 +23,6 @@ Adds alternative parts to WTParts in windchill PDM system. Gets data from Excel 
 
 # search-windchill-bookmarklet.js
 [Bookmarklet](https://en.wikipedia.org/wiki/Bookmarklet): removes dashes, whitespaces, appends "*" to number copied to clipboard and searches for the resulting number in the windchill system.
+
+# creo_cache_recovery.py
+Renames cached Creo files to proper names.
