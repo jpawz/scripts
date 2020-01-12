@@ -26,3 +26,6 @@ Adds alternative parts to WTParts in windchill PDM system. Gets data from Excel 
 
 # creo_cache_recovery.py
 Renames cached Creo files to proper names.
+
+# organize_pdfs.py
+Organizes pdf drawings into directory based on paper size
