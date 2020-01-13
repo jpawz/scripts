@@ -1,10 +1,13 @@
 # Organizes pdf drawings into folders based on sheet format
 
+from decimal import Decimal
 from math import isclose
 from pathlib import Path
 
 from PyPDF2 import PdfFileReader
 from PyPDF2.utils import PdfReadError
+
+POINTS_TO_MM_FACTOR = Decimal(25.4 / 72)
 
 
 def create_directory(paper_size):
@@ -32,8 +35,8 @@ for file in pdfs:
     try:
         with open(file, 'rb') as pdf_file:
             document = PdfFileReader(pdf_file)
-            width = document.getPage(0).mediaBox.getWidth()
-            height = document.getPage(0).mediaBox.getHeight()
+            width = document.getPage(0).mediaBox.getWidth() * POINTS_TO_MM_FACTOR
+            height = document.getPage(0).mediaBox.getHeight() * POINTS_TO_MM_FACTOR
             paper_size = get_paper_size(width, height)
         create_directory(paper_size)
         Path(file).rename(Path(paper_size).joinpath(file))
