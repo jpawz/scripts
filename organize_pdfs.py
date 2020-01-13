@@ -30,10 +30,11 @@ pdfs = Path('.').glob('*.pdf')
 
 for file in pdfs:
     try:
-        document = PdfFileReader(open(file, 'rb'))
-        width = document.getPage(0).mediaBox.getWidth()
-        height = document.getPage(0).mediaBox.getHeight()
-        paper_size = get_paper_size(width, height)
+        with open(file, 'rb') as pdf_file:
+            document = PdfFileReader(pdf_file)
+            width = document.getPage(0).mediaBox.getWidth()
+            height = document.getPage(0).mediaBox.getHeight()
+            paper_size = get_paper_size(width, height)
         create_directory(paper_size)
         Path(file).rename(Path(paper_size).joinpath(file))
     except PdfReadError:
