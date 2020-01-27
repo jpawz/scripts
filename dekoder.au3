@@ -8,11 +8,20 @@
 Opt("WinTitleMatchMode", -2)
 
 Const $notepadPath = "D:\notepad++\notepad++.exe"
-Const $decoderName = "dekoder.exe"
+Const $decoderName = "_dekoder.exe"
 Const $outputDir = "odkodowane"
 
+Global $hWnd
+
+Global $nOpenFiles = 0
+Const $maxOpenFiles = 30
+
+;Local $hTimer = TimerInit()
 Prepare()
 DecodeFiles()
+WinKill($hWnd, "")
+;Local $fDiff = TimerDiff($hTimer)
+;MsgBox($MB_SYSTEMMODAL, "Time: ", $fDiff)
 
 Func Prepare()
 	If not FileExists($notepadPath) Then
@@ -28,14 +37,12 @@ Func DecodeFiles()
 	Local $bEncodedSucessfully = True
 	Local $retries = 0
 	Local $status = 0
-	Local $sleepTime = 50
 	Local $GUI = GUICreate("Informacja", 300, 300)
 	Local $edit = GUICtrlCreateEdit("", 8, 5, 290, 290, BitOR($ES_AUTOVSCROLL, $ES_READONLY, $WS_VSCROLL))
 	ConsoleWriteGUI($edit, "Tych plików nie udało się odkodować - odkoduj ręcznie:" & @CRLF)
 	For $i = 1 to UBound($aFileList) - 1
-		If StringCompare($aFileList[$i], $decoderName) <> 0 Then
 			Do
-				$status = LaunchN($aFileList[$i], $sleepTime)
+				$status = LaunchN($aFileList[$i])
 				If $retries = 3 Then
 					ConsoleWriteGUI($edit, $aFileList[$i] & @CRLF)
 					GUISetState(@SW_SHOW, $GUI)
@@ -43,11 +50,8 @@ Func DecodeFiles()
 					ExitLoop
 				Endif
 				$retries += 1
-				$sleepTime += 1000
 			Until $status = 1
-		Endif
 		$retries = 0
-		$sleepTime = 50
 		ProgressSet(100 * $i / $aFileList[0], "plik " & $i & " / " & ($aFileList[0] - 1))
 	Next
 	ProgressOff()
@@ -65,29 +69,32 @@ Func DecodeFiles()
 EndFunc
 
 
-Func LaunchN($aFile, $sleepTime)
-	Run($notepadPath & " -nosession -alwaysOnTop " & $aFile)
-	Local $hWnd = WinWaitActive("[CLASS:Notepad++]", "", 3)
+Func LaunchN($aFile)
+	Run($notepadPath & " -nosession " & $aFile)
+	$hWnd = WinWaitActive("[CLASS:Notepad++]", "", 3)
 	If $hWnd = 0 Then
 		WinKill($hWnd, "")
 		Return 0
 	Endif
-	Sleep($sleepTime)
 	Send("!^s")
 	Local $sW = WinWaitActive("Zapisywanie jako", "", 3)
 	If $sW = 0 Then
 		WinKill($hWnd, "")
 		Return 0
 	Endif
-	$status = ControlSetText($sW, "[CLASS:#32770]", "[CLASS:Edit; INSTANCE:1]", $outputDir & "\" & $aFile)
+	$status = ControlSetText($sW, "[CLASS:#32770]", "[CLASS:Edit; INSTANCE:1]", @ScriptDir & "\" & $outputDir & "\" & $aFile)
 	If $status = 0 Then
 		WinKill($hWnd, "")
 		Return 0
 	Endif
 	Send("{ENTER}")
 	WinWait($hWnd)
-	ControlFocus($hWnd, "Notepad++", "")
-	WinClose($hWnd)
+	$nOpenFiles += 1
+	If $nOpenFiles = $maxOpenFiles Then
+		ControlFocus($hWnd, "Notepad++", "")
+		WinClose($hWnd)
+		$nOpenFiles = 0
+	Endif
 	Return 1
 EndFunc
 
