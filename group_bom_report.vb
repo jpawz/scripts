@@ -11,10 +11,10 @@ Dim levelFound As Boolean
 
 nRows = Worksheets(ActiveSheet.Name).Range("A2").End(xlDown).Row
 
-Range("A1:A" & nRows) = Range("A1:A" & nRows).Value
-Range("A1:A" & nRows).NumberFormat = "0"
+Range("A2:A" & nRows) = Range("A2:A" & nRows).Value
+Range("A2:A" & nRows).NumberFormat = "0"
 
-maxLevel = WorksheetFunction.Max(Range("A1:A" & nRows))
+maxLevel = WorksheetFunction.Max(Range("A2:A" & nRows))
 
 If maxLevel > 8 Then maxLevel = 8
 
