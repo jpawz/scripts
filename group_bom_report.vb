@@ -19,15 +19,15 @@ maxLevel = WorksheetFunction.Max(Range("A2:A" & nRows))
 If maxLevel > 8 Then maxLevel = 8
 
 
-For level = maxLevel To 1 Step -1
-    For rowNumber = 2 To nRows - 1
+For level = maxLevel To 2 Step -1
+    For rowNumber = 3 To nRows - 1
         levelFound = False
         If Range("A" & rowNumber).Value >= level Then
             startRow = rowNumber
             endRow = rowNumber
             levelFound = True
         End If
-        While Range("A" & rowNumber).Value >= level And Range("A" & rowNumber + 1).Value >= level
+        While Range("A" & rowNumber).Value >= level And Range("A" & rowNumber + 1).Value >= level Or (rowNumber + 1) = nRows
             endRow = rowNumber + 1
             rowNumber = rowNumber + 1
         Wend
