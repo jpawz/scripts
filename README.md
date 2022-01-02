@@ -29,3 +29,6 @@ Renames cached Creo files to proper names.
 
 # organize_pdfs.py
 Organizes pdf drawings into directory based on paper size
+
+# group_bom_report.vb
+Groups BOM report exported from Windchill to Excel. First column contains levels to group based on.
