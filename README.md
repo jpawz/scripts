@@ -32,3 +32,6 @@ Organizes pdf drawings into directory based on paper size
 
 # group_bom_report.vb
 Groups BOM report exported from Windchill to Excel. First column contains levels to group based on.
+
+# clear_copied_text.py
+Clears text copied to clipboard (e.g. from PDF): removes line brakes, redundant whitespaces etc. and copies it back to clipboard.
